@@ -1,0 +1,332 @@
+PrimaryExpression:
+    SimpleExpression
+    FunctionExpression
+    ObjectLiteral
+
+SimpleExpression:
+    XssJsTokenTypeThis
+    XssJsTokenTypeNull
+    XssJsTokenTypeTrue
+    XssJsTokenTypeFalse
+    XssJsTokenTypeInteger
+    XssJsTokenTypeFloat
+    XssJsTokenTypeString
+    XssJsTokenTypeBacktickString
+    XssJsTokenTypeSymbolic
+    XssJsTokenTypeRegExp
+    ParenthesizedExpression
+    ArrayLiteral
+
+ParenthesizedExpression:
+    XssJsTokenTypeLeftPar Expression XssJsTokenTypeRightPar
+
+FunctionExpression:
+    AnonymousFunction
+    NamedFunction
+
+ObjectLiteral:
+    XssJsTokenTypeLeftBrace XssJsTokenTypeRightBrace
+    XssJsTokenTypeLeftBrace FieldList XssJsTokenTypeRightBrace
+
+FieldList:
+    LiteralField
+    FieldList XssJsTokenTypeComma LiteralField
+
+LiteralField:
+    XssJsTokenTypeSymbolic XssJsTokenTypeColon AssignmentExpression
+
+ArrayLiteral:
+    XssJsTokenTypeLeftBacket XssJsTokenTypeRightBacket
+    XssJsTokenTypeLeftBacket ElementList XssJsTokenTypeRightBacket
+
+ElementList:
+    LiteralElement
+    ElementList XssJsTokenTypeComma LiteralElement
+
+LiteralElement:
+    AssignmentExpression
+
+LeftSideExpression:
+    CallExpression
+    ShortNewExpression
+
+CallExpression:
+    PrimaryExpression
+    FullNewExpression
+    CallExpression MemberOperator
+    CallExpression Arguments
+
+FullNewExpression:
+    XssJsTokenTypeNew FullNewSubexpression Arguments
+
+ShortNewExpression:
+    XssJsTokenTypeNew ShortNewSubexpression
+
+FullNewSubexpression:
+    PrimaryExpression
+    FullNewExpression
+    FullNewSubexpression MemberOperator
+
+ShortNewSubexpression:
+    FullNewSubexpression
+    ShortNewExpression
+
+MemberOperator:
+    XssJsTokenTypeLeftBacket Expression XssJsTokenTypeRightBacket
+    XssJsTokenTypeDot XssJsTokenTypeSymbolic
+
+Arguments:
+    XssJsTokenTypeLeftPar XssJsTokenTypeRightPar
+    XssJsTokenTypeLeftPar ArgumentList XssJsTokenTypeRightPar
+    XssJsTokenTypeBacktickString
+
+ArgumentList:
+    AssignmentExpression
+    ArgumentList XssJsTokenTypeComma AssignmentExpression
+
+PostfixExpression:
+    LeftSideExpression
+    LeftSideExpression XssJsTokenTypeIncrementOperator
+
+UnaryExpression:
+    PostfixExpression
+    XssJsTokenTypeDelete LeftSideExpression
+    XssJsTokenTypeVoid UnaryExpression
+    XssJsTokenTypeTypeof UnaryExpression
+    XssJsTokenTypeIncrementOperator LeftSideExpression
+    XssJsTokenTypeAddOperator UnaryExpression
+    XssJsTokenTypeDecOperator UnaryExpression
+    XssJsTokenTypeUnaryOperator UnaryExpression
+
+MultiplicativeExpression:
+    UnaryExpression
+    MultiplicativeExpression XssJsTokenTypeBinaryOperator UnaryExpression
+
+AdditiveExpression:
+    MultiplicativeExpression
+    AdditiveExpression XssJsTokenTypeAddOperator MultiplicativeExpression
+    AdditiveExpression XssJsTokenTypeDecOperator MultiplicativeExpression
+
+ShiftExpression:
+    AdditiveExpression
+    ShiftExpression XssJsTokenTypeShiftOperator AdditiveExpression
+
+RelationalExpression:
+    ShiftExpression
+    RelationalExpression XssJsTokenTypeRelationalOperator ShiftExpression
+    RelationalExpression XssJsTokenTypeInstanceof ShiftExpression
+    RelationalExpression XssJsTokenTypeIn ShiftExpression
+
+EqualityExpression:
+    RelationalExpression
+    EqualityExpression XssJsTokenTypeEqualityOperator RelationalExpression
+
+BitwiseAndExpression:
+    EqualityExpression
+    BitwiseAndExpression XssJsTokenTypeAndOperator EqualityExpression
+
+BitwiseXorExpression:
+    BitwiseAndExpression
+    BitwiseXorExpression XssJsTokenTypeXorOperator BitwiseAndExpression
+
+BitwiseOrExpression:
+    BitwiseXorExpression
+    BitwiseOrExpression XssJsTokenTypeOrOperator BitwiseXorExpression
+
+LogicalAndExpression:
+    BitwiseOrExpression
+    LogicalAndExpression XssJsTokenTypeLogicAndOperator BitwiseOrExpression
+
+LogicalOrExpression:
+    LogicalAndExpression
+    LogicalOrExpression XssJsTokenTypeLogicOrOperator LogicalAndExpression
+
+ConditionalExpression:
+    LogicalOrExpression
+    LogicalOrExpression XssJsTokenTypeQuestion AssignmentExpression XssJsTokenTypeColon AssignmentExpression
+
+AssignmentExpression:
+    ConditionalExpression
+    LeftSideExpression XssJsTokenTypeAssignment AssignmentExpression
+    LeftSideExpression XssJsTokenTypeCompoundAssignment AssignmentExpression
+
+Expression:
+    AssignmentExpression
+    Expression XssJsTokenTypeComma AssignmentExpression
+
+OptionalExpression:
+    Expression
+    empty
+
+Statement:
+    EmptyStatement
+    ExpressionStatement OptionalSemicolon
+    VariableDefinition OptionalSemicolon
+    Block
+    LabeledStatement
+    IfStatement
+    SwitchStatement
+    DoStatement OptionalSemicolon
+    WhileStatement
+    ForStatement
+    WithStatement
+    ContinueStatement OptionalSemicolon
+    BreakStatement OptionalSemicolon
+    ReturnStatement OptionalSemicolon
+    ThrowStatement OptionalSemicolon
+    TryStatement
+
+OptionalSemicolon:
+    XssJsTokenTypeSemicolon
+
+EmptyStatement:
+    XssJsTokenTypeSemicolon
+
+ExpressionStatement:
+    Expression
+
+VariableDefinition:
+    XssJsTokenTypeVar VariableDeclarationList
+
+VariableDeclarationList:
+    VariableDeclaration
+    VariableDeclarationList XssJsTokenTypeComma VariableDeclaration
+
+VariableDeclaration:
+    XssJsTokenTypeSymbolic VariableInitializer
+
+VariableInitializer:
+    XssJsTokenTypeAssignment AssignmentExpression
+    empty
+
+Block:
+    XssJsTokenTypeLeftBrace BlockStatements XssJsTokenTypeRightBrace
+
+BlockStatements:
+    BlockStatementsPrefix
+    empty
+
+BlockStatementsPrefix:
+    Statement
+    BlockStatementsPrefix Statement
+
+LabeledStatement:
+    XssJsTokenTypeSymbolic XssJsTokenTypeColon Statement
+
+IfStatement:
+    XssJsTokenTypeIf ParenthesizedExpression Statement
+    XssJsTokenTypeIf ParenthesizedExpression Statement XssJsTokenTypeElse Statement
+
+SwitchStatement:
+    XssJsTokenTypeSwitch ParenthesizedExpression XssJsTokenTypeLeftBrace XssJsTokenTypeRightBrace
+    XssJsTokenTypeSwitch ParenthesizedExpression XssJsTokenTypeLeftBrace CaseGroups LastCaseGroup XssJsTokenTypeRightBrace
+
+CaseGroups:
+    CaseGroups CaseGroup
+    empty
+
+CaseGroup:
+    CaseGuards BlockStatementsPrefix
+
+LastCaseGroup:
+    CaseGuards BlockStatements
+
+CaseGuards:
+    CaseGuard
+    CaseGuards CaseGuard
+
+CaseGuard:
+    XssJsTokenTypeCase Expression XssJsTokenTypeColon
+    XssJsTokenTypeDefault XssJsTokenTypeColon
+
+DoStatement:
+    XssJsTokenTypeDo Statement XssJsTokenTypeWhile ParenthesizedExpression
+
+WhileStatement:
+    XssJsTokenTypeWhile ParenthesizedExpression Statement
+
+ForStatement:
+    XssJsTokenTypeFor XssJsTokenTypeLeftPar ForInitializer XssJsTokenTypeSemicolon OptionalExpression XssJsTokenTypeSemicolon OptionalExpression XssJsTokenTypeRightPar Statement
+    XssJsTokenTypeFor XssJsTokenTypeLeftPar ForInBinding XssJsTokenTypeIn Expression XssJsTokenTypeRightPar Statement
+
+ForInitializer:
+    empty
+    Expression
+    XssJsTokenTypeVar VariableDeclarationList
+
+ForInBinding:
+    LeftSideExpression
+    XssJsTokenTypeVar VariableDeclaration
+
+WithStatement:
+    XssJsTokenTypeWith ParenthesizedExpression Statement
+
+ContinueStatement:
+    XssJsTokenTypeContinue OptionalLabel
+
+BreakStatement:
+    XssJsTokenTypeBreak OptionalLabel
+
+OptionalLabel:
+    XssJsTokenTypeSymbolic
+    empty
+
+ReturnStatement:
+    XssJsTokenTypeReturn OptionalExpression
+
+ThrowStatement:
+    XssJsTokenTypeThrow Expression
+
+TryStatement:
+    XssJsTokenTypeTry Block CatchClauses
+    XssJsTokenTypeTry Block CatchClauses FinallyClause
+    XssJsTokenTypeTry Block FinallyClause
+
+CatchClauses:
+    CatchClause
+    CatchClauses CatchClause
+
+CatchClause:
+    XssJsTokenTypeCatch XssJsTokenTypeLeftPar XssJsTokenTypeSymbolic XssJsTokenTypeRightPar Block
+
+FinallyClause:
+    XssJsTokenTypeFinally Block
+
+FunctionDefinition:
+    NamedFunction
+    
+AnonymousFunction:
+    XssJsTokenTypeFunction FormalParametersAndBody
+
+NamedFunction:
+    XssJsTokenTypeFunction XssJsTokenTypeSymbolic FormalParametersAndBody
+
+FormalParametersAndBody:
+    XssJsTokenTypeLeftPar FormalParameters XssJsTokenTypeRightPar XssJsTokenTypeLeftBrace TopStatements XssJsTokenTypeRightBrace
+
+FormalParameters:
+    FormalParametersPrefix
+    empty
+
+FormalParametersPrefix:
+    FormalParameter
+    FormalParametersPrefix XssJsTokenTypeComma FormalParameter
+
+FormalParameter:
+    XssJsTokenTypeSymbolic
+
+Program:
+    TopStatements
+
+TopStatements:
+    TopStatementsPrefix
+    empty
+
+TopStatementsPrefix:
+    TopStatement
+    TopStatementsPrefix TopStatement
+
+TopStatement:
+    Statement
+    FunctionDefinition
+
