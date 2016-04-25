@@ -32,3 +32,6 @@ FormalParametersPrefix:
 
 FormalParameter:
     JsTk__identifier
+
+Statement:
+    empty

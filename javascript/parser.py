@@ -3,6 +3,7 @@ import os
 import pprint
 
 from .tokenizer import Tokenizer
+from .ast import Ast
 
 
 def read_grammar():
@@ -27,11 +28,24 @@ class Parser(object):
     def __init__(self, input):
         self.input = input
         self.grammars = read_grammar()
-        self.tokenize()
 
     def tokenize(self):
         t = Tokenizer(self.input)
         self.tokens = list(t.tokenize())
+
+    def first(self, x):
+        fs = set()
+        for i in self.grammars:
+            if i == x:
+                for j in self.grammars[i]:
+                    print j
+
+    def follow(self):
+        pass
+
+    def parse(self):
+        self.tokenize()
+        self.stack = ['Program']
 
 
 def main(argv):
