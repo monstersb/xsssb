@@ -1,4 +1,5 @@
 import sys
+import pprint
 
 
 def read_file():
@@ -19,7 +20,7 @@ def read_file():
 
 def main(argv):
     grammars = read_file()
-    print grammars
+    pprint.pprint(grammars)
 
 if __name__ == '__main__':
     main(sys.argv)
