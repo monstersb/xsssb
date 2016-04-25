@@ -14,6 +14,7 @@ class Tokenizer(object):
             token = self.tokenize_one()
             if token.type != TokenType.space and token.type != TokenType.single_line_comment and token.type != TokenType.multi_line_comment:
                 self.last_token_type = token.type
+                print token
                 yield token
             if token.type == TokenType.terminator:
                 break
@@ -86,7 +87,7 @@ class Tokenizer(object):
                 return Token(TokenType.single_line_comment, self.last_token_value)
             elif self.accept_multi_line_comment():
                 return Token(TokenType.multi_line_comment, self.last_token_value)
-            elif self.last_token_type in [TokenType.addition, TokenType.addition_assignment, TokenType.ask, TokenType.assignment, TokenType.bitwise_and, TokenType.bitwise_and_assignment, TokenType.bitwise_not, TokenType.bitwise_not_assignment, TokenType.bitwise_or, TokenType.bitwise_or_assignment, TokenType.bitwise_xor, TokenType.bitwise_xor_assignment, TokenType.colon, TokenType.comma, TokenType.decrement, TokenType.division, TokenType.division_assignment, TokenType.equal, TokenType.exponentiation, TokenType.exponentiation_assignment, TokenType.greater_than, TokenType.greater_than_or_equal, TokenType.increment, TokenType.left_brace, TokenType.left_bracket, TokenType.left_parenthesis, TokenType.left_shift, TokenType.left_shift_assignment, TokenType.less_than, TokenType.less_than_or_equal, TokenType.line_separator, TokenType.logical_and, TokenType.logical_not, TokenType.logical_or, TokenType.multiplication, TokenType.multiplication_assignment, TokenType.not_equal, TokenType.remainder, TokenType.remainder_assignment, TokenType.right_shift, TokenType.right_shift_assignment, TokenType.semicolon, TokenType.single_line_comment, TokenType.strict_equal, TokenType.strict_not_equal, TokenType.subtraction, TokenType.subtraction_assignment, TokenType.unsigned_right_shift, TokenType.unsigned_right_shift_assignment, TokenType.keyword_return]:
+            elif self.last_token_type in [TokenType.addition, TokenType.addition_assignment, TokenType.ask, TokenType.assignment, TokenType.bitwise_and, TokenType.bitwise_and_assignment, TokenType.bitwise_not, TokenType.bitwise_not_assignment, TokenType.bitwise_or, TokenType.bitwise_or_assignment, TokenType.bitwise_xor, TokenType.bitwise_xor_assignment, TokenType.colon, TokenType.comma, TokenType.decrement, TokenType.division, TokenType.division_assignment, TokenType.equal, TokenType.exponentiation, TokenType.exponentiation_assignment, TokenType.greater_than, TokenType.greater_than_or_equal, TokenType.increment, TokenType.left_brace, TokenType.left_bracket, TokenType.left_parenthesis, TokenType.left_shift, TokenType.left_shift_assignment, TokenType.less_than, TokenType.less_than_or_equal, TokenType.endl, TokenType.logical_and, TokenType.logical_not, TokenType.logical_or, TokenType.multiplication, TokenType.multiplication_assignment, TokenType.not_equal, TokenType.remainder, TokenType.remainder_assignment, TokenType.right_shift, TokenType.right_shift_assignment, TokenType.semicolon, TokenType.single_line_comment, TokenType.strict_equal, TokenType.strict_not_equal, TokenType.subtraction, TokenType.subtraction_assignment, TokenType.unsigned_right_shift, TokenType.unsigned_right_shift_assignment, TokenType.keyword_return]:
                 if self.accept_regexp():
                     return Token(TokenType.regexp, self.last_token_value)
             elif self.accept_char('='):
@@ -160,7 +161,7 @@ class Tokenizer(object):
         elif self.accept_string():
             return Token(TokenType.string, self.last_token_value)
         elif self.accept_line_separator():
-            return Token(TokenType.line_separator, '\n')
+            return Token(TokenType.endl, '\n')
         elif self.accept_char(''):
             return Token(TokenType.terminator, '')
 

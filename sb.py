@@ -2,14 +2,10 @@
 
 import sys
 import time
-from javascript.tokenizer import Tokenizer
-
+from javascript.parser import Parser
 
 def main(argv):
-    t = Tokenizer(sys.stdin)
-    for i in t.tokenize():
-        print i
-        #time.sleep(0.1)
+    t = Parser(sys.stdin)
 
 if __name__ == '__main__':
     main(sys.argv)

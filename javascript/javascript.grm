@@ -17,18 +17,18 @@ FunctionDefinition:
     NamedFunction
 
 NamedFunction:
-    JsToken__function JsToken__identifier FormalParametersAndBody
+    JsTk__function JsTk__identifier FormalParametersAndBody
 
 FormalParametersAndBody:
-    JsToken__left_parenthesis FormalParameters JsToken__right_parenthesis JsToken__left_brace TopStatements JsToken__right_brace
+    JsTk__( FormalParameters JsTk__) JsTk__{ TopStatements JsTk__}
 
 FormalParameters:
     FormalParametersPrefix
     empty
 
 FormalParametersPrefix:
-    FormalParametersPrefix JsToken__comma FormalParameter
+    FormalParametersPrefix JsTk__, FormalParameter
     FormalParameter
 
 FormalParameter:
-    JsToken__identifier
+    JsTk__identifier
