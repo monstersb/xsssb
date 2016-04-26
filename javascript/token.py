@@ -18,6 +18,7 @@ class TokenType:
     division_assignment = '/='
     dot = '.'
     equal = '=='
+    empty = 'Empty'
     exponentiation = '**'
     exponentiation_assignment = '**='
     greater_than = '>'
@@ -121,6 +122,10 @@ class TokenType:
     terminator = 'Terminator'
     unsigned_right_shift = '>>>'
     unsigned_right_shift_assignment = '>>>='
+
+    @staticmethod
+    def is_terminal_symbolic(x):
+        return x.startswith('_')
 
 class Token(object):
     def __init__(self, type, value):

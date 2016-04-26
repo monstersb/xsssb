@@ -3,7 +3,7 @@ Program:
 
 TopStatements:
     TopStatementsPrefix
-    empty
+    Empty
 
 TopStatementsPrefix:
     TopStatement
@@ -17,21 +17,21 @@ FunctionDefinition:
     NamedFunction
 
 NamedFunction:
-    JsTk__function JsTk__identifier FormalParametersAndBody
+    _function _identifier FormalParametersAndBody
 
 FormalParametersAndBody:
-    JsTk__( FormalParameters JsTk__) JsTk__{ TopStatements JsTk__}
+    _( FormalParameters _) _{ TopStatements _}
 
 FormalParameters:
     FormalParametersPrefix
-    empty
+    Empty
 
 FormalParametersPrefix:
-    FormalParametersPrefix JsTk__, FormalParameter
+    FormalParametersPrefix _, FormalParameter
     FormalParameter
 
 FormalParameter:
-    JsTk__identifier
+    _identifier
 
 Statement:
-    empty
+    Empty

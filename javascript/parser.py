@@ -3,48 +3,70 @@ import os
 import pprint
 
 from .tokenizer import Tokenizer
+from .token import TokenType
 from .ast import Ast
 
 
-def read_grammar():
-    fname = os.path.join(os.path.dirname(__file__), './javascript.grm')
-    grammars = {}
-    with open(fname, 'r') as f:
-        current_nonterminal_symbolic = None
-        for line in f:
-            line = line.strip()
-            if line.endswith(':'):
-                if current_nonterminal_symbolic:
-                    print '{0} => \n\t   {1}\n'.format(current_nonterminal_symbolic, '\n\t|  '.join([' '.join(i) for i in grammars[current_nonterminal_symbolic]]))
-                current_nonterminal_symbolic = line[:-1].strip()
-                grammars[current_nonterminal_symbolic] = []
-            elif len(line) > 0:
-                grammars[current_nonterminal_symbolic].append(line.split())
-            else:
-                pass
-    return grammars
 
 class Parser(object):
     def __init__(self, input):
         self.input = input
-        self.grammars = read_grammar()
+        self.read_grammar()
+        self.first = {}
+
+    def read_grammar(self):
+        fname = os.path.join(os.path.dirname(__file__), './javascript.grm')
+        self.grammars = {}
+        with open(fname, 'r') as f:
+            current_nonterminal_symbolic = None
+            for line in f:
+                line = line.strip()
+                if line.endswith(':'):
+                    current_nonterminal_symbolic = line[:-1].strip()
+                    self.grammars[current_nonterminal_symbolic] = []
+                elif len(line) > 0:
+                    self.grammars[current_nonterminal_symbolic].append(line.split())
+                else:
+                    pass
+        for s in self.grammars:
+            print '{0} => \n\t   {1}\n'.format(s, '\n\t|  '.join([' '.join(i) for i in self.grammars[s]]))
 
     def tokenize(self):
         t = Tokenizer(self.input)
         self.tokens = list(t.tokenize())
 
-    def first(self, x):
-        fs = set()
-        for i in self.grammars:
-            if i == x:
-                for j in self.grammars[i]:
-                    print j
+    def get_first(self, x):
+        if x in self.first:
+            return self.first[x]
+        first = set()
+        for i in self.grammars[x]:
+            t = i[0]
+            if t == TokenType.empty:
+                first.add(t)
+            elif t == x:
+                pass
+            elif TokenType.is_terminal_symbolic(t):
+                first.add(t)
+            else:
+                for j in i:
+                    tf = self.get_first(j)
+                    if TokenType.empty not in tf:
+                        first = first.union(tf)
+                        break
+                    tf.remove(TokenType.empty)
+                    first = first.union(tf)
+                else:
+                    first.add(TokenType.empty)
+        self.first[x] = first
+        return first
+
 
     def follow(self):
         pass
 
     def parse(self):
         self.tokenize()
+        map(self.get_first, iter(self.grammars))
         self.stack = ['Program']
 
 
