@@ -36,6 +36,8 @@ class Parser(object):
         self.tokens = list(t.tokenize())
 
     def get_first(self, x):
+        if x.startswith('_') or x == 'Empty':
+            return set([x])
         if x in self.first:
             return self.first[x]
         first = set()
@@ -64,9 +66,20 @@ class Parser(object):
     def follow(self):
         pass
 
+    def build_table(self):
+        self.table = {}
+        for n_sym in self.grammars:
+            for ca in self.grammars[n_sym]:
+                for fst in self.get_first(ca[0]):
+                    self.table[(n_sym, fst)] = ca
+        #pprint.pprint(self.table)
+
+
+
     def parse(self):
         self.tokenize()
-        map(self.get_first, iter(self.grammars))
+        #map(self.get_first, iter(self.grammars))
+        self.build_table()
         self.stack = ['Program']
 
 
