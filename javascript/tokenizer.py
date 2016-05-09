@@ -14,7 +14,7 @@ class Tokenizer(object):
             token = self.tokenize_one()
             if token.type != TokenType.space and token.type != TokenType.single_line_comment and token.type != TokenType.multi_line_comment:
                 self.last_token_type = token.type
-                print token
+                #print token
                 yield token
             if token.type == TokenType.terminator:
                 break

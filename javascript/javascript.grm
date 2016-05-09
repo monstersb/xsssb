@@ -7,7 +7,7 @@ TopStatements:
 
 TopStatementsPrefix:
     TopStatement
-    TopStatementsPrefix TopStatement
+    TopStatement TopStatementsPrefix
 
 TopStatement:
     Statement
