@@ -6,12 +6,16 @@ TopStatements:
     Empty
 
 TopStatementsPrefix:
-    TopStatement
-    TopStatement TopStatementsPrefix
+    TopStatement StatementTerminator
+    TopStatement StatementTerminator TopStatementsPrefix
 
 TopStatement:
     Statement
     FunctionDefinition
+
+StatementTerminator:
+    _endl
+    _;
 
 FunctionDefinition:
     NamedFunction

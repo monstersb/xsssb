@@ -30,16 +30,17 @@ class Parser(object):
                 else:
                     pass
         for s in self.grammars:
-            print '{0} => \n\t   {1}\n'.format(s, '\n\t|  '.join([' '.join(i) for i in self.grammars[s]]))
+            #print '{0} => \n\t   {1}\n'.format(s, '\n\t|  '.join([' '.join(i) for i in self.grammars[s]]))
+            pass
 
     def tokenize(self):
-        print '-' * 50
+        #print '-' * 50
         t = Tokenizer(self.input)
         self.tokens = list(t.tokenize())
 
     def get_first(self, x):
         if x in self.first:
-            return self.first[x]
+            return self.first[x].copy()
         if x.startswith('_') or x == 'Empty':
             first = set([x])
         else:
@@ -76,8 +77,8 @@ class Parser(object):
             for ca in self.grammars[n_sym]:
                 for fst in self.get_first(ca[0]):
                     self.table[(n_sym, fst)] = ca
-        print '-' * 50
-        pprint.pprint(self.table)
+        #print '-' * 50
+        #pprint.pprint(self.table)
 
 
 
@@ -85,7 +86,7 @@ class Parser(object):
         self.tokenize()
         map(self.get_first, iter(self.grammars))
         self.build_table()
-        print '-' * 50
+        #print '-' * 50
         self.stack = ['Program']
         i = 0
         while True:
@@ -103,7 +104,7 @@ class Parser(object):
                     continue
                 for x in self.table[(si, ti.type)][::-1]:
                     self.stack.append(x)
-            time.sleep(0.2)
+            #time.sleep(0.2)
 
 
 def main(argv):
