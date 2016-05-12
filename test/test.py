@@ -1,4 +1,5 @@
 import unittest
+import xsssb
 
 class Test(unittest.TestCase):
     def setUp(self):
