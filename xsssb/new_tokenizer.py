@@ -120,7 +120,7 @@ token_lst = [
     ("right_bracket", pp.Literal("]").setResultsName("right_bracket")),
     ("right_par", pp.Literal(")").setResultsName("right_par")),
     ("semicolon", pp.Literal(";").setResultsName("semicolon")),
-    ("multi_line_comment", pp.cppStyleComment.setResultsName("multi_line_comment")),
+    ("multi_line_comment", pp.cStyleComment.setResultsName("multi_line_comment")),
     ("single_line_comment", pp.dblSlashComment.setResultsName("single_line_comment")),
     ("division_assignment", pp.Literal("/=").setResultsName("division_assignment")),
     ("regex", pp.Combine(pp.QuotedString("/", escChar="\\", unquoteResults=False) + pp.Optional(pp.Regex("[gimy]"))).setResultsName("regex")),
@@ -164,7 +164,8 @@ def tokenize_str(buf):
                 last_token = t[0]
             yield t
             i = buf.find(t[1]) + len(t[1])
-        except pp.ParseException:
+        except pp.ParseException as e:
+            print e
             return
 
 def tokenize_file(fname):
