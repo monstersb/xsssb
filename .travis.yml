@@ -5,6 +5,7 @@ python:
 
 install:
     - "pip install termcolor"
+    - "pip install pyparsing"
 
 script: 
     - PYTHONPATH=. python test/test.py

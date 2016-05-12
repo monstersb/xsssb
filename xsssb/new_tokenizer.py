@@ -135,8 +135,6 @@ token_lst = [
     ("identifier", pp.Regex("[$_a-zA-Z][$_a-zA-Z0-9]*").setResultsName('identifier')),
 ]
 
-token_dic = {i[0]:i[1] for i in token_lst}
-
 
 def tokenize_str_one(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
