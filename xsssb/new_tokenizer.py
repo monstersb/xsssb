@@ -4,15 +4,15 @@ import utils
 
 def number_parser():
     point = pp.Literal(".")
-    e = pp.CaselessLiteral("E")
-    plusorminus = pp.Literal("+") | pp.Literal("-")
+    e = pp.CaselessLiteral("e")
+    plusorminus = pp.Literal("+") ^ pp.Literal("-")
     num = pp.Word(pp.nums)
-    dec = pp.Combine(num + pp.Optional(point + pp.Optional(num)) + pp.Optional(e + pp.Optional(plusorminus) + num)) |\
+    dec = pp.Combine(num + pp.Optional(point + pp.Optional(num)) + pp.Optional(e + pp.Optional(plusorminus) + num)) ^\
            pp.Combine(point + pp.Optional(num) + pp.Optional(e + pp.Optional(plusorminus) + num))
-    bin = pp.Regex("0[bB][01]+")
-    hex = pp.Regex("0[xX][0-0a-fA-F]+")
-    oct = pp.Regex("0[oO]?[0-7]+")
-    return dec | bin | hex | oct
+    bin = pp.Combine(pp.Literal("0") + pp.CaselessLiteral("b") + pp.Word("01"))
+    hex = pp.Combine(pp.Literal("0") + pp.CaselessLiteral("x") + pp.Word(pp.hexnums))
+    oct = pp.Combine(pp.Literal("0") + pp.Optional(pp.CaselessLiteral("o")) + pp.Word("01234567"))
+    return dec ^ bin ^ hex ^ oct
 
 token_lst = [
     ("addition_assignment", pp.Literal("+=").setResultsName("addition_assignment")),
@@ -138,22 +138,29 @@ token_lst = [
 token_dic = {i[0]:i[1] for i in token_lst}
 
 
-def tokenize(fname):
-    buf = utils.readFile(fname)
+def tokenize_str_one(buf):
+    r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
+    return r.parseString(buf).asDict().items()[0]
+
+def tokenize_str(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
     i = 0
     while i < len(buf):
         buf = buf[i:]
         try:
             t = r.parseString(buf)
-            yield t
+            yield t.asDict().items()[0]
             i = buf.find(t[0]) + len(t[0])
         except pp.ParseException:
             return
 
+def tokenize_file(fname):
+    buf = utils.readFile(fname)
+    return tokenize_str(buf)
 
 if __name__ == "__main__":
     import sys
     pp.ParserElement.setDefaultWhitespaceChars(' \t')
-    for i in tokenize(sys.argv[1]):
-        print '[{0:20s}] => {1}'.format(i.keys()[0], repr(i[0]))
+    tks = tokenize_file(sys.argv[1])
+    for i in tks:
+        print '[{0:20s}] => {1}'.format(i[0], repr(i[1]))
