@@ -7,7 +7,7 @@ class Test(unittest.TestCase):
 
     def test_tokenize(self):
         self.assertEqual(new_tokenizer.tokenize_str_one('function'), ('function', 'function'))
-        self.assertEqual(new_tokenizer.tokenize_str_one(' \nfunction '), ('function', 'function'))
+        self.assertEqual(new_tokenizer.tokenize_str_one(' \tfunction '), ('function', 'function'))
         self.assertEqual(new_tokenizer.tokenize_str_one('0.10'), ('number', '0.10'))
         self.assertEqual(new_tokenizer.tokenize_str_one('10'), ('number', '10'))
         self.assertEqual(new_tokenizer.tokenize_str_one('1.23'), ('number', '1.23'))

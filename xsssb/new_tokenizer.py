@@ -2,6 +2,8 @@ import re
 import pyparsing as pp
 import utils
 
+pp.ParserElement.setDefaultWhitespaceChars(' \t\f\v')
+
 def number_parser():
     point = pp.Literal(".")
     e = pp.CaselessLiteral("e")
@@ -15,6 +17,7 @@ def number_parser():
     return dec ^ bin ^ hex ^ oct
 
 token_lst = [
+    ("endl", pp.Word("\r\n").setResultsName("endl")),
     ("addition_assignment", pp.Literal("+=").setResultsName("addition_assignment")),
     ("increment", pp.Literal("++").setResultsName("increment")),
     ("addition", pp.Combine(pp.Literal("+") + pp.NotAny(pp.Regex('\+='))).setResultsName("addition")),
@@ -137,12 +140,12 @@ token_lst = [
 
 token_dict = dict(token_lst)
 
+token_before_regex = ("endl", "ask", "semicolon", "colon", "comma", "left_brace", "left_bracket", "left_par", "assignment", "addition", "addition_assignment", "left_shift", "left_shift_assignment", "right_shift", "right_shift_assignment", "unsigned_right_shift", "unsigned_right_shift_assignment", "equal", "not_equal", "strict_equal", "strict_not_equal", "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal", "increment", "decrement", "logical_and", "logical_or", "logical_not", "bitwise_and", "bitwise_and_assignment", "bitwise_or", "bitwise_or_assignment", "bitwise_not", "bitwise_not_assignment", "bitwise_xor", "bitwise_xor_assignment", "exp", "exp_assignment", "multiplication", "multiplication_assignment", "division", "division_assignment", "remainder", "remainder_assignment")
+
 
 def tokenize_str_one(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
     return r.parseString(buf).asDict().items()[0]
-
-token_before_regex = ("ask", "semicolon", "colon", "comma", "left_brace", "left_bracket", "left_par", "assignment", "addition", "addition_assignment", "left_shift", "left_shift_assignment", "right_shift", "right_shift_assignment", "unsigned_right_shift", "unsigned_right_shift_assignment", "equal", "not_equal", "strict_equal", "strict_not_equal", "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal", "increment", "decrement", "logical_and", "logical_or", "logical_not", "bitwise_and", "bitwise_and_assignment", "bitwise_or", "bitwise_or_assignment", "bitwise_not", "bitwise_not_assignment", "bitwise_xor", "bitwise_xor_assignment", "exp", "exp_assignment", "multiplication", "multiplication_assignment", "division", "division_assignment", "remainder", "remainder_assignment")
 
 def tokenize_str(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
@@ -152,7 +155,7 @@ def tokenize_str(buf):
         buf = buf[i:]
         try:
             tbuf = buf.lstrip()
-            if len(tbuf) > 0 and tbuf[0] == '/' and last_token in token_before_regex:
+            if len(tbuf) > 2 and tbuf[0] == '/' and tbuf[1] == '/' and tbuf[1] == '*' and last_token in token_before_regex:
                 t = token_dict['regex'].parseString(buf)
             else:
                 t = r.parseString(buf)
@@ -170,7 +173,6 @@ def tokenize_file(fname):
 
 if __name__ == "__main__":
     import sys
-    pp.ParserElement.setDefaultWhitespaceChars(' \t')
     tks = tokenize_file(sys.argv[1])
     for i in tks:
         print '[{0:20s}] => {1}'.format(i[0], repr(i[1]))
