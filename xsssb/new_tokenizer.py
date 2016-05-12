@@ -17,28 +17,28 @@ def number_parser():
 token_lst = [
     ("addition_assignment", pp.Literal("+=").setResultsName("addition_assignment")),
     ("increment", pp.Literal("++").setResultsName("increment")),
-    ("addition", (pp.Literal("+") + pp.NotAny(pp.Regex('\+='))).setResultsName("addition")),
+    ("addition", pp.Combine(pp.Literal("+") + pp.NotAny(pp.Regex('\+='))).setResultsName("addition")),
     ("ask", pp.Literal("?").setResultsName("ask")),
     ("strict_equal", pp.Literal("===").setResultsName("strict_equal")),
-    ("equal", (pp.Literal("==") + pp.NotAny(pp.Regex('='))).setResultsName("equal")),
-    ("assignment", (pp.Literal("=") + pp.NotAny(pp.Regex('='))).setResultsName("assignment")),
+    ("equal", pp.Combine(pp.Literal("==") + pp.NotAny(pp.Regex('='))).setResultsName("equal")),
+    ("assignment", pp.Combine(pp.Literal("=") + pp.NotAny(pp.Regex('='))).setResultsName("assignment")),
     ("colon", pp.Literal(":").setResultsName("colon")),
     ("comma", pp.Literal(",").setResultsName("comma")),
     ("bitwise_and_assignment", pp.Literal("&=").setResultsName("bitwise_and_assignment")),
     ("logical_and", pp.Literal("&&").setResultsName("logical_and")),
-    ("bitwise_and", (pp.Literal("&") + pp.NotAny(pp.Regex('&='))).setResultsName("bitwise_and")),
+    ("bitwise_and", pp.Combine(pp.Literal("&") + pp.NotAny(pp.Regex('&='))).setResultsName("bitwise_and")),
     ("bitwise_or_assignment", pp.Literal("|=").setResultsName("bitwise_or_assignment")),
     ("logical_or", pp.Literal("||").setResultsName("logical_or")),
-    ("bitwise_or", (pp.Literal("|") + pp.NotAny(pp.Regex('\|='))).setResultsName("bitwise_or")),
+    ("bitwise_or", pp.Combine(pp.Literal("|") + pp.NotAny(pp.Regex('\|='))).setResultsName("bitwise_or")),
     ("bitwise_not_assignment", pp.Literal("~=").setResultsName("bitwise_not_assignment")),
-    ("bitwise_not", (pp.Literal("~") + pp.NotAny(pp.Regex("="))).setResultsName("bitwise_not")),
+    ("bitwise_not", pp.Combine(pp.Literal("~") + pp.NotAny(pp.Regex("="))).setResultsName("bitwise_not")),
     ("bitwise_xor_assignment", pp.Literal("^=").setResultsName("bitwise_xor_assignment")),
-    ("bitwise_xor", (pp.Literal("^") + pp.NotAny(pp.Regex("="))).setResultsName("bitwise_xor")),
+    ("bitwise_xor", pp.Combine(pp.Literal("^") + pp.NotAny(pp.Regex("="))).setResultsName("bitwise_xor")),
     ("dot", pp.Literal(".").setResultsName("dot")),
     ("exp_assignment", pp.Literal("**=").setResultsName("exp_assignment")),
-    ("exp", (pp.Literal("**") + pp.NotAny(pp.Regex('='))).setResultsName("exp")),
+    ("exp", pp.Combine(pp.Literal("**") + pp.NotAny(pp.Regex('='))).setResultsName("exp")),
     ("multiplication_assignment", pp.Literal("*=").setResultsName("multiplication_assignment")),
-    ("multiplication", (pp.Literal("*") + pp.NotAny(pp.Regex('='))).setResultsName("multiplication")),
+    ("multiplication", pp.Combine(pp.Literal("*") + pp.NotAny(pp.Regex('='))).setResultsName("multiplication")),
     ("keyword_await", pp.Keyword("await").setResultsName("await")),
     ("keyword_abstract", pp.Keyword("abstract").setResultsName("abstract")),
     ("keyword_break", pp.Keyword("break").setResultsName("break")),
@@ -104,15 +104,15 @@ token_lst = [
     ("left_bracket", pp.Literal("[").setResultsName("left_bracket")),
     ("left_par", pp.Literal("(").setResultsName("left_par")),
     ("left_shift_assignment", pp.Literal("<<=").setResultsName("left_shift_assignment")),
-    ("left_shift", (pp.Literal("<<") + pp.NotAny(pp.Regex('='))).setResultsName("left_shift")),
+    ("left_shift", pp.Combine(pp.Literal("<<") + pp.NotAny(pp.Regex('='))).setResultsName("left_shift")),
     ("less_than_or_equal", pp.Literal("<=").setResultsName("less_than_or_equal")),
-    ("less_than", (pp.Literal("<") + pp.NotAny(pp.Regex('='))).setResultsName("less_than")),
+    ("less_than", pp.Combine(pp.Literal("<") + pp.NotAny(pp.Regex('='))).setResultsName("less_than")),
     ("strict_not_equal", pp.Literal("!==").setResultsName("strict_not_equal")),
-    ("not_equal", (pp.Literal("!=") + pp.NotAny(pp.Regex('='))).setResultsName("not_equal")),
-    ("logical_not", (pp.Literal("!") + pp.NotAny(pp.Regex('\!='))).setResultsName("logical_not")),
+    ("not_equal", pp.Combine(pp.Literal("!=") + pp.NotAny(pp.Regex('='))).setResultsName("not_equal")),
+    ("logical_not", pp.Combine(pp.Literal("!") + pp.NotAny(pp.Regex('\!='))).setResultsName("logical_not")),
     ("number", number_parser().setResultsName("number")),
     ("remainder_assignment", pp.Literal("%=").setResultsName("remainder_assignment")),
-    ("remainder", (pp.Literal("%") + pp.NotAny(pp.Regex('='))).setResultsName("remainder")),
+    ("remainder", pp.Combine(pp.Literal("%") + pp.NotAny(pp.Regex('='))).setResultsName("remainder")),
     ("right_brace", pp.Literal("}").setResultsName("right_brace")),
     ("right_bracket", pp.Literal("]").setResultsName("right_bracket")),
     ("right_par", pp.Literal(")").setResultsName("right_par")),
@@ -121,34 +121,46 @@ token_lst = [
     ("single_line_comment", pp.dblSlashComment.setResultsName("single_line_comment")),
     ("division_assignment", pp.Literal("/=").setResultsName("division_assignment")),
     ("regex", pp.Combine(pp.QuotedString("/", escChar="\\", unquoteResults=False) + pp.Optional(pp.Regex("[gimy]"))).setResultsName("regex")),
-    ("division", (pp.Literal("/") + pp.NotAny(pp.Regex('/\*='))).setResultsName("division")),
+    ("division", pp.Combine(pp.Literal("/") + pp.NotAny(pp.Regex('/\*='))).setResultsName("division")),
     ("string", pp.quotedString.setResultsName("string")),
     ("decrement", pp.Literal("--").setResultsName("decrement")),
     ("subtraction_assignment", pp.Literal("-=").setResultsName("subtraction_assignment")),
-    ("subtraction", (pp.Literal("-") + pp.NotAny(pp.Regex('-='))).setResultsName("subtraction")),
+    ("subtraction", pp.Combine(pp.Literal("-") + pp.NotAny(pp.Regex('-='))).setResultsName("subtraction")),
     ("unsigned_right_shift_assignment", pp.Literal(">>>=").setResultsName("unsigned_right_shift_assignment")),
-    ("unsigned_right_shift", (pp.Literal(">>>") + pp.NotAny(pp.Regex('='))).setResultsName("unsigned_right_shift")),
-    ("right_shift", (pp.Literal(">>") + pp.NotAny(pp.Regex('>='))).setResultsName("right_shift")),
+    ("unsigned_right_shift", pp.Combine(pp.Literal(">>>") + pp.NotAny(pp.Regex('='))).setResultsName("unsigned_right_shift")),
+    ("right_shift", pp.Combine(pp.Literal(">>") + pp.NotAny(pp.Regex('>='))).setResultsName("right_shift")),
     ("right_shift_assignment", pp.Literal(">>=").setResultsName("right_shift_assignment")),
     ("greater_than_or_equal", pp.Literal(">=").setResultsName("greater_than_or_equal")),
-    ("greater_than", (pp.Literal(">") + pp.NotAny(pp.Regex('>='))).setResultsName("greater_than")),
+    ("greater_than", pp.Combine(pp.Literal(">") + pp.NotAny(pp.Regex('>='))).setResultsName("greater_than")),
     ("identifier", pp.Regex("[$_a-zA-Z][$_a-zA-Z0-9]*").setResultsName('identifier')),
 ]
+
+token_dict = dict(token_lst)
 
 
 def tokenize_str_one(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
     return r.parseString(buf).asDict().items()[0]
 
+token_before_regex = ("ask", "semicolon", "colon", "comma", "left_brace", "left_bracket", "left_par", "assignment", "addition", "addition_assignment", "left_shift", "left_shift_assignment", "right_shift", "right_shift_assignment", "unsigned_right_shift", "unsigned_right_shift_assignment", "equal", "not_equal", "strict_equal", "strict_not_equal", "greater_than", "greater_than_or_equal", "less_than", "less_than_or_equal", "increment", "decrement", "logical_and", "logical_or", "logical_not", "bitwise_and", "bitwise_and_assignment", "bitwise_or", "bitwise_or_assignment", "bitwise_not", "bitwise_not_assignment", "bitwise_xor", "bitwise_xor_assignment", "exp", "exp_assignment", "multiplication", "multiplication_assignment", "division", "division_assignment", "remainder", "remainder_assignment")
+
 def tokenize_str(buf):
     r = reduce(lambda a, b: a ^ b, map(lambda x:x[1], token_lst))
     i = 0
+    last_token = None
     while i < len(buf):
         buf = buf[i:]
         try:
-            t = r.parseString(buf)
-            yield t.asDict().items()[0]
-            i = buf.find(t[0]) + len(t[0])
+            tbuf = buf.lstrip()
+            if len(tbuf) > 0 and tbuf[0] == '/' and last_token in token_before_regex:
+                t = token_dict['regex'].parseString(buf)
+            else:
+                t = r.parseString(buf)
+            t = t.asDict().items()[0]
+            if t[0] not in ('single_line_comment', 'multi_line_comment'):
+                last_token = t[0]
+            yield t
+            i = buf.find(t[1]) + len(t[1])
         except pp.ParseException:
             return
 
