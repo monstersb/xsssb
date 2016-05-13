@@ -62,6 +62,7 @@ token_lst = [
     ["k_enum", pp.Keyword("enum")],
     ["k_export", pp.Keyword("export")],
     ["k_extends", pp.Keyword("extends")],
+    ["k_false", pp.Keyword("false")],
     ["k_final", pp.Keyword("final")],
     ["k_finally", pp.Keyword("finally")],
     ["k_float", pp.Keyword("float")],
@@ -95,6 +96,7 @@ token_lst = [
     ["k_throw", pp.Keyword("throw")],
     ["k_throws", pp.Keyword("throws")],
     ["k_transient", pp.Keyword("transient")],
+    ["k_true", pp.Keyword("true")],
     ["k_try", pp.Keyword("try")],
     ["k_typeof", pp.Keyword("typeof")],
     ["k_var", pp.Keyword("var")],
@@ -104,7 +106,7 @@ token_lst = [
     ["k_with", pp.Keyword("with")],
     ["k_yield", pp.Keyword("yield")],
     ["l_brace", pp.Literal("{")],
-    ["l_bracket", pp.Literal("[")],
+    ["l_brkt", pp.Literal("[")],
     ["l_par", pp.Literal("(")],
     ["l_sft_ass", pp.Literal("<<=")],
     ["l_sft", pp.Combine(pp.Literal("<<") + pp.NotAny(pp.Regex("=")))],
@@ -182,4 +184,4 @@ if __name__ == "__main__":
     import sys
     tks = tokenize_file(sys.argv[1])
     for i in tks:
-        print "[{0:10s}] => {1}".format(i[0], repr(i[1]))
+        print "<{0} {1}>".format(i[0], repr(i[1]))
