@@ -1,4 +1,4 @@
-from javascript.token import Token, TokenType
+from .token import Token, TokenType
 from collections import deque
 
 class Tokenizer(object):

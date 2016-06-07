@@ -2,7 +2,7 @@
 
 import sys
 import time
-from javascript.parser import Parser
+from xsssb.parser import Parser
 
 def main(argv):
     t = Parser(sys.stdin)

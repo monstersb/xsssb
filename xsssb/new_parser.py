@@ -19,6 +19,9 @@ class Grammar(dict):
     __getitem__ = __getattr__
     __setitem__ = __setattr__
 
+    @staticmethod
+    def Program():
+
 
 grammar = Grammar()
 
@@ -35,6 +38,8 @@ grammar.ArrayLiteral = token.l_brkt + (pp.Optional(grammar.Elision) ^ (grammar.E
 grammar.Literal = token.number ^ token.string ^ token.k_true ^ token.k_false ^ token.k_null ^ token.reg
 grammar.PrimaryExpression = token.k_this ^ grammar.ObjectLiteral ^ pp.Group(token.l_par ^ grammar.Expression ^ token.r_par) ^ token.id ^ grammar.ArrayLiteral ^ grammar.Literal
 
+class Parser(object):
+    pass
 
 if __name__ == "__main__":
     pass
